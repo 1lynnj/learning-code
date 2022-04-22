@@ -10,7 +10,7 @@ screen.setup(width=800, height=600)
 screen.bgcolor("green")
 screen.title("Let's play pong!")
 screen.tracer(0)  # turn off animation >> have to manually update screen. See below
-screen.bgpic("pong_background.png")
+screen.bgpic("pong_background.gif")
 
 # line = Middle()
 
