@@ -7,13 +7,14 @@ screen.bgpic('blank_states_img.gif')
 screen.title('US State Game')
 
 data = pandas.read_csv('50_states.csv')
+
 data_dict = data.to_dict()
 # print(data_dict)
 
-# list to run game loop only if guess in list
-states = []
-for key in data_dict['state']:
-    states.append(data_dict['state'][key])
+
+# list to run game loop only if guess in list ## iterate over data frame to get access to states
+states = [row.state for (index, row) in data.iterrows()]
+
 
 score = 0
 guessed_states = []
@@ -25,33 +26,51 @@ while game_on:
     if player_guess == "Exit":
         # create a csv file of states not guessed
         missing_states = [state for state in states if state not in guessed_states]
+        print(f'missing_states: {missing_states}')
 
         new_data = pandas.DataFrame(missing_states)
         new_data.to_csv('states_to_learn.csv')
+        game_on = False
 
+#######Turning off this block of code to play with dataframes
+    # if player_guess in states:
+    #     score += 1
+    #     guessed_states.append(player_guess)
+    #
+    #     for key in data_dict['state']:
+    #         # print(data_dict['state'][key])
+    #         x = data_dict['x'][key]
+    #         y = data_dict['y'][key]
+    #         if player_guess == data_dict['state'][key]:
+    #             # player = True
+    #             state = Turtle()
+    #             state.hideturtle()
+    #             state.penup()
+    #             # print(f'Guess: {player_guess}')
+    #             state.goto(x, y)
+    #             state.write(f'{player_guess}', font=('Arial', 8, 'normal'))
+## trying out this block of code ################
     if player_guess in states:
         score += 1
         guessed_states.append(player_guess)
-        for key in data_dict['state']:
-            # print(data_dict['state'][key])
-            x = data_dict['x'][key]
-            y = data_dict['y'][key]
-            if player_guess == data_dict['state'][key]:
-                # player = True
-                state = Turtle()
-                state.hideturtle()
-                state.penup()
-                # print(f'Guess: {player_guess}')
-                state.goto(x, y)
-                state.write(f'{player_guess}', font=('Arial', 8, 'normal'))
+        coords = (row.x for (index, row) in data.iterrows() if player_guess == row.state, row.y for (index, row) in data.iterrows() if player_guess == row.state)
+        # y = row.y for (index, row) in data.iterrows() if player_guess == row.state
 
-    else:
-        lost = Turtle()
-        lost.hideturtle()
-        lost.penup()
-        lost.goto(-150, 0)
-        lost.write(f'{player_guess} is wrong!', font=('Arial', 40, 'normal'))
-        game_on = False
+        s = Turtle()
+        s.hideturtle()
+        s.penup()
+        s.goto(x, y)
+        s.write(f'{player_guess}', font=('Arial', 8, 'normal'))
+
+
+##################################################
+    # else:
+    #     lost = Turtle()
+    #     lost.hideturtle()
+    #     lost.penup()
+    #     lost.goto(-150, 0)
+    #     lost.write(f'{player_guess} is wrong!', font=('Arial', 40, 'normal'))
+    #     game_on = False
 
 
 
